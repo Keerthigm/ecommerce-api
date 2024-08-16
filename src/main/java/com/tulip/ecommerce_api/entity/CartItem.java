@@ -1,6 +1,6 @@
 package com.tulip.ecommerce_api.entity;
 
-import com.tulip.ecommerce_api.dto.UserDTO;
+//import com.tulip.ecommerce_api.dto.UserDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -35,7 +35,12 @@ public class CartItem {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public void setUser(Optional<UserDTO> user) {
-    }
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+//    public void setUser(User user) {
+//        this.user = user;
+//    }
 }
 

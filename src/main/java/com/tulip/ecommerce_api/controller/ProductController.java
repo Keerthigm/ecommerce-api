@@ -1,7 +1,6 @@
 package com.tulip.ecommerce_api.controller;
 
-//mport org.springframework.beans.factory.annotation.Autowired;
-import com.tulip.ecommerce_api.dto.ProductDTO;
+
 import com.tulip.ecommerce_api.entity.Product;
 import com.tulip.ecommerce_api.service.ProductService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,17 +19,17 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping
-    public List<ProductDTO> getAllProducts() {
+    public List<Product> getAllProducts() {
         return productService.getAllProducts();
     }
 
     @GetMapping("/category/{categoryId}")
-    public List<ProductDTO> getProductsByCategory(@PathVariable Long categoryId) {
+    public List<Product> getProductsByCategory(@PathVariable Long categoryId) {
         return productService.getProductsByCategory(categoryId);
     }
 
     @GetMapping("/{id}")
-    public ProductDTO getProductById(@PathVariable Long id) {
+    public Product getProductById(@PathVariable Long id) {
         return productService.getProductById(id);
     }
 }

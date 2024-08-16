@@ -1,7 +1,7 @@
 package com.tulip.ecommerce_api.controller;
 
-import com.tulip.ecommerce_api.dto.OrderDTO;
-import com.tulip.ecommerce_api.dto.UserDTO;
+import com.tulip.ecommerce_api.entity.Order;
+import com.tulip.ecommerce_api.entity.User;
 import com.tulip.ecommerce_api.service.OrderService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.log4j.Log4j2;
@@ -27,18 +27,18 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<String> placeOrder(UserDTO userDetails) {
+    public ResponseEntity<String> placeOrder(User userDetails) {
         orderService.placeOrder(userDetails.getUsername());
         return ResponseEntity.status(HttpStatus.CREATED).body("Order placed successfully");
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderDTO>> getOrderHistory(UserDTO userDetails) {
+    public ResponseEntity<List<Order>> getOrderHistory(User userDetails) {
         return ResponseEntity.ok(orderService.getOrderHistory(userDetails.getUsername()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long id) {
+    public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
         return ResponseEntity.ok(orderService.getOrderById(id));
     }
 }

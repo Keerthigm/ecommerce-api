@@ -1,9 +1,7 @@
 package com.tulip.ecommerce_api.service.implementation;
 
-import com.tulip.ecommerce_api.dto.CartDTO;
-import com.tulip.ecommerce_api.dto.OrderDTO;
-import com.tulip.ecommerce_api.dto.UserDTO;
 import com.tulip.ecommerce_api.entity.CartItem;
+import com.tulip.ecommerce_api.entity.Order;
 import com.tulip.ecommerce_api.entity.User;
 import com.tulip.ecommerce_api.exception.ResourceNotFoundException;
 import com.tulip.ecommerce_api.repository.CartRepository;
@@ -33,30 +31,30 @@ public class OrderServiceImpl implements OrderService {
     private UserService userService;
     @Override
     public void placeOrder(String username) {
-        User user = userService.getUserByname(username);
-        List<CartDTO> cartDTOList = cartRepository.findByUser(user);
+        Optional<User> user = userService.getByUsername(username);
+        List<CartItem> cartDTOList = cartRepository.findByUser(user);
 
         if (cartDTOList.isEmpty()) {
             throw new ResourceNotFoundException("Cart is empty");
         }
 
-        OrderDTO order = new OrderDTO();
+        Order order = new Order();
         order.setUser(user);
         order.setOrderDate(LocalDateTime.now());
         order.setTotalAmount(cartDTOList.stream().mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity()).sum());
-        order.setCartDTOList(cartDTOList);
+        order.setCartItems(cartDTOList);
 
         orderRepository.save(order);
         cartRepository.deleteAll(cartDTOList);
     }
     @Override
-    public List<OrderDTO> getOrderHistory(String username) {
-        User user = userService.getUserByname(username);
-        return orderRepository.findByUser((UserDTO) user);
+    public List<Order> getOrderHistory(String username) {
+        Optional<User> user = userService.getByUsername(username);
+        return orderRepository.findByUser(user);
     }
     @Override
-    public OrderDTO getOrderById(Long orderId) {
-        return (OrderDTO) orderRepository.findById(orderId)
+    public Order getOrderById(Long orderId) {
+        return (Order) orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
     }
 }
